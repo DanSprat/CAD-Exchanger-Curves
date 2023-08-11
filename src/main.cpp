@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <iomanip>
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -79,6 +80,6 @@ int main() {
     for (auto* circle : circles) {
         total_sum += circle->getRadius();
     }
-    std::cout << "Total sum of radii of all circles is: " << total_sum
-              << std::endl;
+    std::cout << "Total sum of radii of all circles is: " << std::fixed
+              << std::setprecision(2) << total_sum << std::endl;
 }
