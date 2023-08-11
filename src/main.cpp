@@ -33,7 +33,7 @@ UniqueCurve getRandomCurve() {
 }
 
 int main() {
-    std::uniform_int_distribution<> dist(10, 11);
+    std::uniform_int_distribution<> dist(10, 100'000);
     size_t size = dist(rng);
     std::vector<UniqueCurve> curves;
     curves.reserve(size);
@@ -72,7 +72,7 @@ int main() {
 
     double total_sum = 0.0;
 
-// clang-format off
+    // clang-format off
     #pragma omp parallel for reduction(+ : total_sum)
     // clang-format on
 
