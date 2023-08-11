@@ -1,11 +1,12 @@
-#include "factories/random_factories.h"
+#include <omp.h>
 
 #include <algorithm>
-#include <iostream> 
-#include <memory>
-#include <omp.h>
-#include <vector>
 #include <cmath>
+#include <iostream>
+#include <memory>
+#include <vector>
+
+#include "factories/random_factories.h"
 
 using UniqueCurve = std::unique_ptr<Curve3D>;
 
@@ -13,10 +14,10 @@ std::random_device rd;
 std::mt19937 rng(rd());
 
 UniqueCurve getRandomCurve() {
-    std::uniform_int_distribution<> dist(1,3);
+    std::uniform_int_distribution<> dist(1, 3);
     int type = dist(rng);
-    
-    switch(type) {
+
+    switch (type) {
         case 1: {
             return RandomCircleFactory::getInstance()->getRandomCurve();
         }
@@ -26,7 +27,8 @@ UniqueCurve getRandomCurve() {
         case 3: {
             return RandomHelixFactory::getInstance()->getRandomCurve();
         }
-        default: throw std::runtime_error("Unknown type of curve");
+        default:
+            throw std::runtime_error("Unknown type of curve");
     }
 }
 
@@ -42,36 +44,41 @@ int main() {
 
     constexpr double kT = M_PI / 4;
 
-    for (auto& curve: curves) {
-        std::cout<< "Point: "<< curve->getPoint(kT)<<std::endl;
-        std::cout<< "Derivative: "<< curve->getDerivative(kT)<<std::endl;
+    for (auto& curve : curves) {
+        std::cout << "Point: " << curve->getPoint(kT) << std::endl;
+        std::cout << "Derivative: " << curve->getDerivative(kT) << std::endl;
     }
 
     std::vector<Circle*> circles;
-    for (auto& curve: curves) {
+    for (auto& curve : curves) {
         if (auto* ptr = dynamic_cast<Circle*>(curve.get()); ptr) {
             circles.push_back(ptr);
-        } 
+        }
     }
 
     constexpr double kEPSILON = 10e-10;
-    auto circle_cmp = [&kEPSILON] (Circle* lhs, Circle* rhs) -> bool {
+    auto circle_cmp = [&kEPSILON](Circle* lhs, Circle* rhs) -> bool {
         if (abs(lhs->getRadius() - rhs->getRadius()) < kEPSILON) {
-          return false;  
+            return false;
         }
         return lhs->getRadius() < rhs->getRadius();
     };
 
     std::sort(circles.begin(), circles.end(), circle_cmp);
-    for (auto* circle: circles) {
-        std::cout<<circle-> getRadius()<<" ";
+    for (auto* circle : circles) {
+        std::cout << circle->getRadius() << " ";
     }
-    std::cout<<std::endl;
+    std::cout << std::endl;
 
     double total_sum = 0.0;
-    #pragma omp parallel for reduction(+:total_sum)
-    for (auto* circle: circles) {
-        total_sum += circle-> getRadius();
+
+// clang-format off
+    #pragma omp parallel for reduction(+ : total_sum)
+    // clang-format on
+
+    for (auto* circle : circles) {
+        total_sum += circle->getRadius();
     }
-    std::cout<<"Total sum of radii of all circles is: " << total_sum <<std::endl;
+    std::cout << "Total sum of radii of all circles is: " << total_sum
+              << std::endl;
 }

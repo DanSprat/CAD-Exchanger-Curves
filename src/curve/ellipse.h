@@ -2,7 +2,7 @@
 #include "curve.h"
 
 class Ellipse : public Curve3D {
-    
+
 public:
     Ellipse(double, double);
     Point3D getPoint(double) const override;

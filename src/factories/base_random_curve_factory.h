@@ -1,15 +1,17 @@
 #pragma once
-#include "../curve/circle.h"
-#include "../curve/helix.h"
-#include "../curve/ellipse.h"
-
 #include <memory>
 #include <random>
+
+#include "../curve/circle.h"
+#include "../curve/ellipse.h"
+#include "../curve/helix.h"
 
 class BaseRandomCurveFactory {
 
 public:
-    BaseRandomCurveFactory() : rng_(dev_()), radius_dist_(kEPSILON, kMAX_RADIUS) { }
+    BaseRandomCurveFactory()
+        : rng_(dev_()), radius_dist_(kEPSILON, kMAX_RADIUS) {
+    }
     virtual std::unique_ptr<Curve3D> getRandomCurve() const = 0;
 
 protected:
@@ -20,4 +22,3 @@ protected:
     mutable std::mt19937 rng_;
     mutable std::uniform_real_distribution<> radius_dist_;
 };
-

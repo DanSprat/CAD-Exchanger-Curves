@@ -1,8 +1,6 @@
 #include "random_factories.h"
 
-// Definition for Circle factory
 RandomCircleFactory::RandomCircleFactory() : BaseRandomCurveFactory() {
-
 }
 std::unique_ptr<Curve3D> RandomCircleFactory::getRandomCurve() const {
     return std::make_unique<Circle>(radius_dist_(rng_));
@@ -13,9 +11,7 @@ BaseRandomCurveFactory* RandomCircleFactory::getInstance() {
     return &circle_factory;
 }
 
-// Definition for Ellipse factory
 RandomEllipseFactory::RandomEllipseFactory() : BaseRandomCurveFactory() {
-
 }
 std::unique_ptr<Curve3D> RandomEllipseFactory::getRandomCurve() const {
     return std::make_unique<Ellipse>(radius_dist_(rng_), radius_dist_(rng_));
@@ -26,9 +22,8 @@ BaseRandomCurveFactory* RandomEllipseFactory::getInstance() {
     return &ellipse_factory;
 }
 
-// Definition for Helix factory
-RandomHelixFactory::RandomHelixFactory() : BaseRandomCurveFactory(), pitch_dist_(kEPSILON, kMAX_PITCH)  {
-
+RandomHelixFactory::RandomHelixFactory()
+    : BaseRandomCurveFactory(), pitch_dist_(kEPSILON, kMAX_PITCH) {
 }
 std::unique_ptr<Curve3D> RandomHelixFactory::getRandomCurve() const {
     return std::make_unique<Helix>(radius_dist_(rng_), radius_dist_(rng_));

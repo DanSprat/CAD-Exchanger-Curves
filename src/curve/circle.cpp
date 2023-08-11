@@ -1,8 +1,8 @@
 #include "circle.h"
+
 #include <cmath>
 
-Circle::Circle(double radius): radius_(radius) {
-    
+Circle::Circle(double radius) : radius_(radius) {
 }
 
 Point3D Circle::getPoint(double t) const {

@@ -1,4 +1,5 @@
 #include "helix.h"
+
 #include <cmath>
 
 Helix::Helix(double radius, double pitch) : radius_(radius), pitch_(pitch) {
@@ -13,7 +14,7 @@ Vector3D Helix::getDerivative(double t) const {
 }
 
 const double& Helix::getRadius() const {
-    return radius_; 
+    return radius_;
 }
 
 const double& Helix::getPitch() const {
